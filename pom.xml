@@ -12,7 +12,7 @@
 	<artifactId>easerent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>easerent</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Rent Management project using Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -45,12 +45,27 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-devtools</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
-	</dependencies>
+		</dependency>	
+		<dependency>
+        	<groupId>org.slf4j</groupId>
+        	<artifactId>slf4j-api</artifactId>
+        	<version>2.0.0</version> <!-- Replace with the latest version -->
+    	</dependency>
 
+   		<!-- Logback Classic -->
+    	<dependency>
+        	<groupId>ch.qos.logback</groupId>
+        	<artifactId>logback-classic</artifactId>
+        	<version>1.4.0</version> <!-- Replace with the latest version -->
+    	</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
