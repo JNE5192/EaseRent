@@ -24,15 +24,15 @@ public class TenantService {
 				.map( existingTenant -> {
 					existingTenant.setTenantName(updatedTenant.getTenantName());
 					existingTenant.setAge(updatedTenant.getAge());
-					existingTenant.setNoOfFamilyMembers(existingTenant.getNoOfFamilyMembers());
-					existingTenant.setPermanentAddress(existingTenant.getPermanentAddress());
-
+					existingTenant.setNoOfFamilyMembers(updatedTenant.getNoOfFamilyMembers());
+					existingTenant.setPermanentAddress(updatedTenant.getPermanentAddress());
+					existingTenant.setMobileNumber(updatedTenant.getMobileNumber());
+					
 					logger.debug("Updated tenant details are : " + existingTenant.toString());
 
 					return tenantRepository.save(existingTenant);
 				})
 				.orElseThrow(()-> new RuntimeException("Tenant with tenant id : " + tenantId + " cannot be found"));
-
 	}
 
 	
