@@ -6,8 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.example.rent.management.system.easerent.entity.OwnerAuthentication;
 
 @Repository
-public interface OwnerAuthRepository extends JpaRepository<OwnerAuthentication,String> {
-	
-	
-
+public interface OwnerAuthRepository extends JpaRepository<OwnerAuthentication,String> {	
+	boolean existsByEmail(String email);
 }
