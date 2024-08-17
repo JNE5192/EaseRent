@@ -6,18 +6,26 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
-public class Owner {
+public class OwnerAuthentication {
 	
 	@Id
 	private String ownerId;
 	
 	@Column(nullable = false)
+	@Size(min = 2, max = 30)
 	private String ownerName;
 	
+	@NotEmpty(message = "Password cannot be empty")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
 	private String password;
 	
+	@NotEmpty(message = "Email id cannot be empty")
+	@Email(message = "Email id must be valid")
 	private String email;
 
 	public String getOwnerId() {
