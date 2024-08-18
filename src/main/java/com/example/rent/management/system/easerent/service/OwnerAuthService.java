@@ -1,8 +1,14 @@
 package com.example.rent.management.system.easerent.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.example.rent.management.system.easerent.entity.OwnerAuthentication;
@@ -11,11 +17,16 @@ import com.example.rent.management.system.easerent.repository.OwnerAuthRepositor
 @Service
 public class OwnerAuthService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(OwnerAuthService.class);
+	
 	@Autowired
 	OwnerAuthRepository ownerAuthRepository;
 	
 	@Autowired
     private BCryptPasswordEncoder passwordEncoder;
+	
+	@Autowired
+	AuthenticationManager authenticationManager;
 	
 	public OwnerAuthentication registerOwner(OwnerAuthentication ownerAuthentication) {
 		if(ownerAuthRepository.existsByEmail(ownerAuthentication.getEmail()))
@@ -25,6 +36,33 @@ public class OwnerAuthService {
 		ownerAuthentication.setPassword(passwordEncoder.encode(ownerAuthentication.getPassword()));
 			
 		return ownerAuthRepository.save(ownerAuthentication);
+	}
+	
+	
+	public String loginOwner(OwnerAuthentication loginUser) throws RuntimeException, AuthenticationException {
+		try {
+			OwnerAuthentication existingUser = (ownerAuthRepository.findByOwnerId(loginUser.getOwnerId())).get();
+
+			if(existingUser == null) {
+				throw new RuntimeException("Owner not found");
+			}
+
+			if(passwordEncoder.matches(loginUser.getPassword(), existingUser.getPassword())) {
+				logger.debug("**************************INSIDE IF");
+				Authentication authentication = authenticationManager.authenticate(
+						new UsernamePasswordAuthenticationToken(loginUser.getOwnerId(), loginUser.getPassword())
+						);
+
+				if (authentication.isAuthenticated()) {
+					logger.debug("**************************INSIDE IF AUTHENTICATED");
+					return "Login successful";
+				}
+			}
+		} catch (AuthenticationException authenticationException) {
+			authenticationException.getMessage();
+		}
+
+		return "Login Failed";
 	}
 
 }

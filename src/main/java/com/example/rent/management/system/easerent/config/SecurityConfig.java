@@ -1,11 +1,19 @@
 package com.example.rent.management.system.easerent.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.example.rent.management.system.easerent.service.CustomUserDetailsService;
+
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.authentication.AuthenticationManager;
 
 
 @Configuration
@@ -26,7 +34,7 @@ public class SecurityConfig {
             )
             .authorizeRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/api/auth/signup").permitAll() // Allow access to the signup endpoint without authentication
+                    .requestMatchers("/api/auth/**").permitAll() // Allow access to the signup endpoint without authentication
                     .anyRequest().authenticated() // All other requests require authentication
             )
             .logout(logout ->
@@ -36,5 +44,18 @@ public class SecurityConfig {
 
         return http.build();
     }
+	
+	@Autowired
+    private CustomUserDetailsService userDetailsService;
+	
+	@Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder())
+                .and()
+                .build();
+    }
+	
 }
 

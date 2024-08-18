@@ -18,7 +18,7 @@ public class OwnerAuthController {
 	OwnerAuthService ownerAuthService;
 	
 	@PostMapping("/signup")
-	public Response registerOwner(@RequestBody OwnerAuthentication ownerAuthentication) {
+	public Response register(@RequestBody OwnerAuthentication ownerAuthentication) {
 		Response response = new Response();
 		try {
 			OwnerAuthentication registeredOwner = ownerAuthService.registerOwner(ownerAuthentication);
@@ -34,6 +34,31 @@ public class OwnerAuthController {
 		} catch(RuntimeException e) {
 			e.getMessage();
 		}
+		return response;
+	}
+	
+	@PostMapping("/login")
+	public Response login(@RequestBody OwnerAuthentication ownerAuthentication) {
+		Response response = new Response();
+		try {
+			
+			String loginStatus = ownerAuthService.loginOwner(ownerAuthentication);
+			
+			if(loginStatus.equalsIgnoreCase("Login successful")) {
+				response.setStatus("true");
+				response.setMessage(loginStatus);
+			}
+			
+			else {
+				response.setStatus("false");
+				response.setMessage(loginStatus);
+			}
+			
+		} catch(RuntimeException e) {
+			e.getMessage();
+		}
+		
+										
 		return response;
 	}
 
