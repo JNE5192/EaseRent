@@ -17,6 +17,17 @@ public class OwnerAuthController {
 	@Autowired
 	OwnerAuthService ownerAuthService;
 	
+	
+	/**
+	 * Register user in table owner_authentication
+	 * 
+	 * <p> The full service url for this endpoint is : </p>
+	 * <p> <code>http://localhost:8080/api/auth/signup<code> </p>
+	 * 
+	 * @author Juhilee Nazare
+	 * @param ownerAuthentication
+	 * @return
+	 */
 	@PostMapping("/signup")
 	public Response register(@RequestBody OwnerAuthentication ownerAuthentication) {
 		Response response = new Response();
@@ -37,6 +48,17 @@ public class OwnerAuthController {
 		return response;
 	}
 	
+	
+	/**
+	 * Login user by applying checks on username and password
+	 * 
+	 * <p> The full service url for this endpoint is : </p>
+	 * <p> <code>http://localhost:8080/api/auth/login<code> </p>
+	 * 
+	 * @author Juhilee Nazare
+	 * @param ownerAuthentication
+	 * @return
+	 */
 	@PostMapping("/login")
 	public Response login(@RequestBody OwnerAuthentication ownerAuthentication) {
 		Response response = new Response();

@@ -28,6 +28,12 @@ public class OwnerAuthService {
 	@Autowired
 	AuthenticationManager authenticationManager;
 	
+	
+	/**
+	 * @author Juhilee Nazare
+	 * @param ownerAuthentication
+	 * @return OwnerAuthentication registered user
+	 */
 	public OwnerAuthentication registerOwner(OwnerAuthentication ownerAuthentication) {
 		if(ownerAuthRepository.existsByEmail(ownerAuthentication.getEmail()))
 			throw new RuntimeException("Email id : " + ownerAuthentication.getEmail() + " is already registered");
@@ -39,6 +45,13 @@ public class OwnerAuthService {
 	}
 	
 	
+	/**
+	 * @author Juhilee Nazare
+	 * @param loginUser
+	 * @return String login status
+	 * @throws RuntimeException
+	 * @throws AuthenticationException
+	 */
 	public String loginOwner(OwnerAuthentication loginUser) throws RuntimeException, AuthenticationException {
 		try {
 			OwnerAuthentication existingUser = (ownerAuthRepository.findByOwnerId(loginUser.getOwnerId())).get();
@@ -48,13 +61,11 @@ public class OwnerAuthService {
 			}
 
 			if(passwordEncoder.matches(loginUser.getPassword(), existingUser.getPassword())) {
-				logger.debug("**************************INSIDE IF");
 				Authentication authentication = authenticationManager.authenticate(
 						new UsernamePasswordAuthenticationToken(loginUser.getOwnerId(), loginUser.getPassword())
 						);
 
 				if (authentication.isAuthenticated()) {
-					logger.debug("**************************INSIDE IF AUTHENTICATED");
 					return "Login successful";
 				}
 			}
