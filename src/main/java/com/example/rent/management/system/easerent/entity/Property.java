@@ -20,6 +20,12 @@ public class Property {
 	@Column(nullable = false)
 	private String propertyType;
 	
+	@Column(nullable = false)
+	private int noOfRooms;
+	
+	@Column(nullable = false)
+	private double area;
+	
 	@Embedded
 	@Column(nullable = false)
 	private Address address;
@@ -46,6 +52,22 @@ public class Property {
 
 	public void setPropertyType(String propertyType) {
 		this.propertyType = propertyType;
+	}
+
+	public int getNoOfRooms() {
+		return noOfRooms;
+	}
+
+	public void setNoOfRooms(int noOfRooms) {
+		this.noOfRooms = noOfRooms;
+	}
+
+	public double getArea() {
+		return area;
+	}
+
+	public void setArea(double area) {
+		this.area = area;
 	}
 
 	public Address getAddress() {

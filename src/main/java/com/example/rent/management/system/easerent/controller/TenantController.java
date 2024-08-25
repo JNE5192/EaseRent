@@ -50,6 +50,7 @@ public class TenantController {
 	 * @throws IllegalArgumentException
 	 * @return tenantId
 	 */
+	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 	@PostMapping("/")
 	public Long addTenant(HttpSession session, @RequestBody Tenant tenant) throws IllegalArgumentException, RuntimeException {
 
@@ -89,6 +90,7 @@ public class TenantController {
 	 * @return response
 	 * @throws NullPointerException
 	 */
+	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 	@PutMapping("/{tenantId}")
 	public Response updateTenant(@RequestBody Tenant tenant, @PathVariable Long tenantId) throws NullPointerException {
 		
@@ -127,6 +129,7 @@ public class TenantController {
 	 * @return tenant
 	 * @throws NullPointerException
 	 */
+	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 	@GetMapping("/{tenantId}")
 	public Tenant getTenant(@PathVariable Long tenantId) throws NullPointerException {
 		
@@ -150,7 +153,7 @@ public class TenantController {
 	 * @return response
 	 * @throws NullPointerException
 	 */
-	
+	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 	@DeleteMapping("/{tenantId}")
 	public Response deleteTenant(@PathVariable Long tenantId) throws NullPointerException {
 		Response response = new Response();
