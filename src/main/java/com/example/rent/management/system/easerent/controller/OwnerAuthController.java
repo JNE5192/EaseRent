@@ -1,9 +1,13 @@
 package com.example.rent.management.system.easerent.controller;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +17,9 @@ import com.example.rent.management.system.easerent.dto.Response;
 import com.example.rent.management.system.easerent.entity.OwnerAuthentication;
 import com.example.rent.management.system.easerent.service.OwnerAuthService;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -116,5 +122,27 @@ public class OwnerAuthController {
 		
 		return response;
 	}
+	
+	
+	
+	@GetMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Invalidate the session
+        request.getSession().invalidate();
+        
+        // Clear the Security Context
+        SecurityContextHolder.clearContext();
+        
+        // Clear any authentication cookies if present (e.g., session cookie)
+        // Optionally, you can set a cookie with an empty value to clear it
+        
+        Cookie cookie = new Cookie("JSESSIONID", "");
+        cookie.setMaxAge(0); // Expire the cookie
+        cookie.setPath("/"); // Set path to root
+        response.addCookie(cookie);
+        
+        // Redirect to the login page or homepage
+        response.sendRedirect("/login"); // Adjust URL as needed
+    }
 
 }

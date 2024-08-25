@@ -43,6 +43,8 @@ public class SecurityConfig {
                 authorizeRequests
                     .requestMatchers("/api/auth/**").permitAll() // Allow access to the signup endpoint without authentication
                     .requestMatchers("/tenant/**").permitAll()
+                    .requestMatchers("/property/**").permitAll()
+                    .requestMatchers("/error/**").permitAll()
                     .anyRequest().authenticated() // All other requests require authentication
             )
             .logout(logout ->
