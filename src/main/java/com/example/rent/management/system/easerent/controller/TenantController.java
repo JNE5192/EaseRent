@@ -129,8 +129,8 @@ public class TenantController {
 	 * @return tenant
 	 * @throws NullPointerException
 	 */
-	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 	@GetMapping("/{tenantId}")
+	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 	public Tenant getTenant(@PathVariable Long tenantId) throws NullPointerException {
 		
 		if(tenantId == null || tenantId == 0) 
