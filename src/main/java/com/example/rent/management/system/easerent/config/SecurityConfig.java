@@ -15,6 +15,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.server.session.HeaderWebSessionIdResolver;
 
 
 @Configuration
@@ -25,6 +26,11 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+	
+	 @Bean
+	    public HeaderWebSessionIdResolver httpSessionIdResolver() {
+	        return new HeaderWebSessionIdResolver(); // Use Cookie-based session ID resolver
+	    }
 	
 	//TODO: Learn more about CSRF and Spring Security
 	@Bean

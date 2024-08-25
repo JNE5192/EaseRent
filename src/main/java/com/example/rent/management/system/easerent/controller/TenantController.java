@@ -1,8 +1,11 @@
 package com.example.rent.management.system.easerent.controller;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -167,6 +170,29 @@ public class TenantController {
 		}
 		
 		return response;	
+	}
+	
+	/**
+	 * Returns list of tenants for logged in owner from table "tenant" of database "rent_ease" using tenant id
+	 * 
+	 * @author Juhilee Nazare
+	 * 
+	 * <p> The full service url for this endpoint is : </p>
+	 * <p> <code>http://localhost:8080/tenant/list</code> </p>
+	 * 
+	 * 
+	 * @param HttpSession
+	 * @return List
+	 * @throws RuntimeException
+	 */
+	@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+	@GetMapping("/list")
+	public List<Tenant> listTenant(HttpSession session)  {
+		logger.info("______________________________________ SESSION ID " + session.getId());
+		String ownerId = (String) session.getAttribute("ownerId");
+		if(ownerId == null || ownerId.isEmpty())
+			throw new RuntimeException("Owner Id cannot be null or empty");
+		return tenantRepository.findByOwnerId(ownerId);
 	}
 	
 }
