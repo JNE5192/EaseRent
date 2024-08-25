@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.rent.management.system.easerent.dto.Response;
 import com.example.rent.management.system.easerent.entity.Tenant;
 import com.example.rent.management.system.easerent.repository.TenantRepository;
+import com.example.rent.management.system.easerent.service.OwnerAuthService;
 import com.example.rent.management.system.easerent.service.TenantService;
+
+import jakarta.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/tenant")
@@ -28,6 +31,9 @@ public class TenantController {
 	
 	@Autowired
 	private TenantRepository tenantRepository;
+	
+	@Autowired
+	OwnerAuthService ownerAuthService;
 	
 	/**
 	 * Inserts a tenant in table "tenant" of database "rent_ease"
@@ -42,13 +48,26 @@ public class TenantController {
 	 * @return tenantId
 	 */
 	@PostMapping("/")
-	public Long addTenant(@RequestBody Tenant tenant) throws IllegalArgumentException {
-		
-		if (tenant.getTenantName() == null || tenant.getPermanentAddress() == null) 
-			throw new IllegalArgumentException("Tenant name and address must not be null."); 
-		
-		logger.debug("Inserting tenant: " + tenant.toString());
+	public Long addTenant(HttpSession session, @RequestBody Tenant tenant) throws IllegalArgumentException, RuntimeException {
 
+		logger.info("**************************SESSION ID 2 : " + session.getId());
+		
+		try {
+			if (tenant.getTenantName() == null || tenant.getPermanentAddress() == null) 
+				throw new IllegalArgumentException("Tenant name and address must not be null."); 
+
+			tenant.setOwnerId((String)session.getAttribute("ownerId"));
+			if(tenant.getOwnerId() == null || tenant.getOwnerId() == "")
+				throw new RuntimeException("Owner id cannot be empty or null");
+		}
+		catch(IllegalArgumentException e) {
+			e.getMessage();
+		}
+		catch(RuntimeException e) {
+			e.getMessage();
+		}
+
+		logger.info("Inserting tenant: " + tenant.toString());
 		return (tenantRepository.save(tenant)).getTenantId();
 	}
 

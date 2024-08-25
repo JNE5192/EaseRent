@@ -12,6 +12,7 @@ import com.example.rent.management.system.easerent.service.CustomUserDetailsServ
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.authentication.AuthenticationManager;
 
@@ -30,17 +31,21 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/api/**") // Disable CSRF for API endpoints
+                .disable() // Disable CSRF for API endpoints
             )
             .authorizeRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/api/auth/**").permitAll() // Allow access to the signup endpoint without authentication
+                    .requestMatchers("/tenant/**").permitAll()
                     .anyRequest().authenticated() // All other requests require authentication
             )
             .logout(logout ->
                 logout
+                	.invalidateHttpSession(true)
                     .permitAll() // Allow everyone to log out
-            );
+            )
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
 
         return http.build();
     }

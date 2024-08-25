@@ -1,6 +1,12 @@
 package com.example.rent.management.system.easerent.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,10 +16,14 @@ import com.example.rent.management.system.easerent.dto.Response;
 import com.example.rent.management.system.easerent.entity.OwnerAuthentication;
 import com.example.rent.management.system.easerent.service.OwnerAuthService;
 
+import jakarta.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/api/auth")
 public class OwnerAuthController {
 	
+	
+	private static final Logger logger = LoggerFactory.getLogger(OwnerAuthController.class);
 	@Autowired
 	OwnerAuthService ownerAuthService;
 	
@@ -28,6 +38,7 @@ public class OwnerAuthController {
 	 * @param ownerAuthentication
 	 * @return
 	 */
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/signup")
 	public Response register(@RequestBody OwnerAuthentication ownerAuthentication) {
 		Response response = new Response();
@@ -44,6 +55,8 @@ public class OwnerAuthController {
 			}
 		} catch(RuntimeException e) {
 			e.getMessage();
+			response.setStatus("false");
+			response.setMessage("Owner with email id " + ownerAuthentication.getEmail() + " already exists");
 		}
 		return response;
 	}
@@ -59,28 +72,40 @@ public class OwnerAuthController {
 	 * @param ownerAuthentication
 	 * @return
 	 */
+	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/login")
-	public Response login(@RequestBody OwnerAuthentication ownerAuthentication) {
+	public Response login(HttpSession session, @RequestBody OwnerAuthentication ownerAuthentication) {
 		Response response = new Response();
 		try {
 			
-			String loginStatus = ownerAuthService.loginOwner(ownerAuthentication);
+			logger.info("**************************SESSION ID 1 : " + session.getId());
 			
+			session.setAttribute("ownerId", ownerAuthentication.getOwnerId());
+			
+			String loginStatus = ownerAuthService.loginOwner(ownerAuthentication);
+
 			if(loginStatus.equalsIgnoreCase("Login successful")) {
 				response.setStatus("true");
 				response.setMessage(loginStatus);
-			}
-			
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+		            System.out.println( "****************************************Authenticated as: " + ((UserDetails)
+		            		  authentication.getPrincipal()).getUsername());
+		        	System.out.println("****************YES*************************");
+		        }
+		        ownerAuthService.getCurrentUser();			}
+
 			else {
 				response.setStatus("false");
 				response.setMessage(loginStatus);
 			}
-			
+
 		} catch(RuntimeException e) {
 			e.getMessage();
+			response.setStatus("false");
+			response.setMessage("Owner not found");
 		}
 		
-										
 		return response;
 	}
 

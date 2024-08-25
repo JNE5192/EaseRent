@@ -8,9 +8,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Tenant {
+	
+	@Column(nullable = false)
+	private String ownerId;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +33,15 @@ public class Tenant {
 	@Column(nullable = false)
 	private Long mobileNumber;
 	
+	
+	public String getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(String ownerId) {
+		this.ownerId = ownerId;
+	}
+
 	public long getTenantId() {
 		return tenantId;
 	}
@@ -79,10 +92,9 @@ public class Tenant {
 
 	@Override
 	public String toString() {
-		return "Tenant [tenantId=" + tenantId + ", tenantName=" + tenantName + ", age=" + age + ", noOfFamilyMembers="
-				+ noOfFamilyMembers + ", permanentAddress=" + permanentAddress + "]";
+		return "Tenant [ownerId=" + ownerId + ", tenantId=" + tenantId + ", tenantName=" + tenantName + ", age=" + age
+				+ ", noOfFamilyMembers=" + noOfFamilyMembers + ", permanentAddress=" + permanentAddress
+				+ ", mobileNumber=" + mobileNumber + "]";
 	}
-	
-	
-	
+
 }
