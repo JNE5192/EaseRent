@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.PrePersist;
 
 @Entity
@@ -29,6 +30,16 @@ public class Property {
 	@Embedded
 	@Column(nullable = false)
 	private Address address;
+	
+	private String imageName;
+	
+    private String contentType;
+
+    @Column(columnDefinition = "LONGBLOB")
+    @Lob
+    private byte[] photo;
+    
+    //private String base64image;
 
 	public String getOwnerId() {
 		return ownerId;
@@ -78,6 +89,38 @@ public class Property {
 		this.address = address;
 	}
 	
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName) {
+		this.imageName = imageName;
+	}
+
+	public String getContentType() {
+		return contentType;
+	}
+
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
+	}
+
+	public byte[] getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(byte[] photo) {
+		this.photo = photo;
+	}
+
+	/*public String getBase64image() {
+		return base64image;
+	}
+
+	public void setBase64image(String base64image) {
+		this.base64image = base64image;
+	}*/
+
 	@Override
 	public String toString() {
 		return "Property [ownerId=" + ownerId + ", propertyId=" + propertyId + ", address=" + address + "]";

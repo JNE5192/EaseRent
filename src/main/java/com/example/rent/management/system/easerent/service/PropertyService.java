@@ -1,10 +1,16 @@
 package com.example.rent.management.system.easerent.service;
 
+import java.io.IOException;
+import java.util.Base64;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.example.rent.management.system.easerent.dto.Address;
 import com.example.rent.management.system.easerent.entity.Property;
 import com.example.rent.management.system.easerent.repository.PropertyRepository;
 
@@ -31,4 +37,41 @@ public class PropertyService {
 				.orElseThrow(()-> new RuntimeException("Property with property id : " + propertyId + " cannot be found"));
 	}
 
+	
+	
+	public Property saveProperty(String ownerId, String propertyType, int noOfRooms, double area, Address address, String imageName, String contentType, MultipartFile photo) throws IOException {
+        Property property = new Property();
+        property.setOwnerId(ownerId);
+        property.setPropertyType(propertyType);
+        property.setNoOfRooms(noOfRooms);
+        property.setArea(area);
+        property.setAddress(address);
+        property.setImageName(imageName);
+        property.setContentType(contentType);
+    
+        if (photo != null && !photo.isEmpty()) {
+            property.setPhoto(photo.getBytes()); // Convert image to byte array
+        }
+
+        return propertyRepository.save(property);
+    }
+	
+	
+	public Property getPropertyById(String propertyId) {
+        return propertyRepository.findByPropertyId(propertyId);
+    }
+	
+	
+	public void deleteProperty(String propertyId) throws RuntimeException {
+
+		if(propertyRepository.findByPropertyId(propertyId) !=null) {
+			logger.debug("Deleting property with id : " + propertyId);
+			propertyRepository.deleteById(propertyId);	
+			//force push changes to table, might not work correctly every time
+			propertyRepository.flush();
+		}
+		else {
+			throw new RuntimeException("Property with property id : " + propertyId + " cannot be found");
+		}
+	}
 }
