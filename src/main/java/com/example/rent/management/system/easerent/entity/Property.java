@@ -39,7 +39,8 @@ public class Property {
     @Lob
     private byte[] photo;
     
-    //private String base64image;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isAllocated = false;
 
 	public String getOwnerId() {
 		return ownerId;
@@ -113,13 +114,13 @@ public class Property {
 		this.photo = photo;
 	}
 
-	/*public String getBase64image() {
-		return base64image;
+	public boolean getIsAllocated() {
+		return isAllocated;
 	}
 
-	public void setBase64image(String base64image) {
-		this.base64image = base64image;
-	}*/
+	public void setBase64image(boolean isAllocated) {
+		this.isAllocated = isAllocated;
+	}
 
 	@Override
 	public String toString() {
