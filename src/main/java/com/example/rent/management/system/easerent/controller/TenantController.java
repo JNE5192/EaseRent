@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.rent.management.system.easerent.dto.Response;
 import com.example.rent.management.system.easerent.entity.Tenant;
+import com.example.rent.management.system.easerent.repository.PropertyRepository;
 import com.example.rent.management.system.easerent.repository.TenantRepository;
 import com.example.rent.management.system.easerent.service.OwnerAuthService;
 import com.example.rent.management.system.easerent.service.TenantService;
@@ -34,6 +35,9 @@ public class TenantController {
 	
 	@Autowired
 	private TenantRepository tenantRepository;
+	
+	@Autowired
+	private PropertyRepository propertyRepository;
 	
 	@Autowired
 	OwnerAuthService ownerAuthService;
@@ -72,6 +76,7 @@ public class TenantController {
 		}
 
 		logger.info("Inserting tenant: " + tenant.toString());
+		propertyRepository.markAsAllocated(tenant.getPropertyId());
 		return (tenantRepository.save(tenant)).getTenantId();
 	}
 
