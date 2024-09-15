@@ -33,6 +33,9 @@ public class Tenant {
 	@Column(nullable = false)
 	private Long mobileNumber;
 	
+	@Column(nullable = false)
+	private String propertyId;
+	
 	
 	public String getOwnerId() {
 		return ownerId;
@@ -89,12 +92,21 @@ public class Tenant {
 	public void setMobileNumber(Long mobileNumber) {
 		this.mobileNumber = mobileNumber;
 	}
+	
+	public String getPropertyId() {
+		return propertyId;
+	}
+
+	public void setPropertyId(String propertyId) {
+		this.propertyId = propertyId;
+	}
 
 	@Override
 	public String toString() {
 		return "Tenant [ownerId=" + ownerId + ", tenantId=" + tenantId + ", tenantName=" + tenantName + ", age=" + age
 				+ ", noOfFamilyMembers=" + noOfFamilyMembers + ", permanentAddress=" + permanentAddress
-				+ ", mobileNumber=" + mobileNumber + "]";
+				+ ", mobileNumber=" + mobileNumber + ", propertyId=" + propertyId + "]";
 	}
+
 
 }
